@@ -1,0 +1,183 @@
+@import "tailwindcss";
+
+:root {
+  --font-sans: "Inter", sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+
+  /* Brand Colors */
+  --color-brand-blue: #1E3A8A;
+  --color-brand-orange: #F97316;
+
+  /* Light Mode */
+  --color-light-bg: #F8FAFC;
+  --color-light-card: rgba(255, 255, 255, 0.95);
+
+  /* Dark Mode */
+  --color-dark-bg: #eaf4ff;
+  --color-dark-nav: #f5faff;
+  --color-dark-card: #ffffff;
+
+  --animate-float-slow: float 8s ease-in-out infinite;
+  --animate-float-medium: float 6s ease-in-out infinite;
+  --animate-float-fast: float 4s ease-in-out infinite;
+  --animate-spin-slow: spin 25s linear infinite;
+  --animate-pulse-glow: pulse-glow 3s alternate infinite;
+  --animate-marquee-infinite: marquee 35s linear infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-20px) scale(1.03); }
+}
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 15px rgba(30, 58, 138, 0.3), 0 0 5px rgba(249, 115, 22, 0.2); }
+  100% { box-shadow: 0 0 35px rgba(30, 58, 138, 0.6), 0 0 15px rgba(249, 115, 22, 0.4); }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Custom CSS Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(30, 58, 138, 0.25); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(249, 115, 22, 0.5); }
+.dark ::-webkit-scrollbar-thumb { background: rgba(249, 115, 22, 0.2); }
+.dark ::-webkit-scrollbar-thumb:hover { background: rgba(249, 115, 22, 0.45); }
+
+/* Base typography */
+body {
+  font-family: var(--font-sans);
+  background: var(--color-light-bg);
+  color: #0f172a;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+::selection {
+  background: rgba(249, 115, 22, 0.28);
+  color: #0f172a;
+}
+
+.dark body {
+  color: #f8fafc;
+}
+
+/* =====================
+   LIGHT MODE GLASS
+   ===================== */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(30, 58, 138, 0.08);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+}
+
+/* =====================
+   DARK MODE GLASS
+   ===================== */
+.dark .glass-panel {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(30, 58, 138, 0.14);
+  box-shadow: 0 20px 60px rgba(59, 130, 246, 0.16);
+}
+
+/* =====================
+   BRAND GRADIENTS
+   ===================== */
+.text-gradient {
+  background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 50%, #F97316 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-brand {
+  background: linear-gradient(135deg, #F97316 0%, #1E3A8A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* =====================
+   DOT GRID BACKGROUND
+   ===================== */
+.bg-dot-grid {
+  background-image: radial-gradient(rgba(30, 58, 138, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.dark .bg-dot-grid {
+  background-image: radial-gradient(rgba(249, 115, 22, 0.04) 1px, transparent 1px);
+}
+
+/* =====================
+   ANIMATED BORDER
+   ===================== */
+.animated-gradient-border {
+  position: relative;
+  border-radius: inherit;
+}
+.animated-gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: -1.5px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(90deg, #1E3A8A, #3B82F6, #F97316, #1E3A8A);
+  background-size: 300% 300%;
+  animation: border-glow 6s linear infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+@keyframes border-glow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* =====================
+   HEXAGON LOGO SHAPE
+   ===================== */
+.hexagon {
+  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+}
+
+/* =====================
+   DARK MODE CARD GLOW
+   ===================== */
+.dark .card-glow {
+  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.08),
+              0 8px 32px rgba(0, 0, 0, 0.4),
+              0 0 24px rgba(30, 58, 138, 0.06);
+}
+.dark .card-glow:hover {
+  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.15),
+              0 12px 40px rgba(0, 0, 0, 0.5),
+              0 0 32px rgba(30, 58, 138, 0.12);
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* =====================
+   TOAST ANIMATIONS
+   ===================== */
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(16px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes toast-out {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(-8px) scale(0.96); }
+}
+.toast-enter { animation: toast-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.toast-exit { animation: toast-out 0.25s ease-in forwards; }
