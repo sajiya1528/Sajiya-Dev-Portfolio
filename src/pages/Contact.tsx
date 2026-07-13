@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Mail, Phone, MapPin, Github, Linkedin, Send,
+  Mail, Phone, Linkedin, Github, Send,
   CheckCircle2, AlertCircle, Clock,
 } from "lucide-react";
 import emailjs from "@emailjs/browser";
 import { portfolioData } from "../data/portfolioData";
+import { cn } from "../lib/utils";
 
 interface ContactFormData {
   name: string;
@@ -21,7 +22,7 @@ interface Toast {
 }
 
 export const Contact: React.FC = () => {
-  const { email, phone, location, github, linkedin } = portfolioData.personalInfo;
+  const { email, phone, github, linkedin } = portfolioData.personalInfo;
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [toast, setToast] = useState<Toast | null>(null);
@@ -40,7 +41,6 @@ export const Contact: React.FC = () => {
     const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
     const publicKey  = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-    // Build template params including submission time
     const submittedAt = new Date().toLocaleString("en-IN", {
       dateStyle: "medium",
       timeStyle: "short",
@@ -58,7 +58,6 @@ export const Contact: React.FC = () => {
     };
 
     if (!serviceId || !templateId || !publicKey) {
-      // Mock mode: simulate sending with a delay
       setTimeout(() => {
         setIsSubmitting(false);
         showToast("success", "Message delivered! (EmailJS keys not set — configure .env for live emails)");
@@ -71,7 +70,7 @@ export const Contact: React.FC = () => {
       const res = await emailjs.send(serviceId, templateId, templateParams, publicKey);
       if (res.status === 200) {
         setIsSubmitting(false);
-        showToast("success", "✓ Message sent successfully! Sajiya will get back to you soon.");
+        showToast("success", "Message sent successfully! Sajiya will get back to you soon.");
         reset();
       } else {
         throw new Error("EmailJS returned non-200 status");
@@ -79,69 +78,43 @@ export const Contact: React.FC = () => {
     } catch (err: any) {
       console.error("EmailJS error:", err);
       setIsSubmitting(false);
-      showToast("error", "✗ Failed to send. Please email directly at sajiyanazir28@gmail.com");
+      showToast("error", "Failed to send. Please email directly at sajiyanazir28@gmail.com");
     }
   };
 
-  /* ────────────────────────── Contact info cards ───────────────────────── */
-  const contactCards = [
-    {
-      label: "Email",
-      value: email,
-      href: `mailto:${email}`,
-      icon: <Mail className="w-4 h-4" />,
-      color: "text-[#1E3A8A] dark:text-blue-400",
-      bg: "bg-[#1E3A8A]/8 dark:bg-[#1E3A8A]/20 border-[#1E3A8A]/15",
-    },
-    {
-      label: "Phone",
-      value: `+91 ${phone}`,
-      href: `tel:${phone}`,
-      icon: <Phone className="w-4 h-4" />,
-      color: "text-[#F97316] dark:text-orange-400",
-      bg: "bg-[#F97316]/8 dark:bg-[#F97316]/15 border-[#F97316]/15",
-    },
-    {
-      label: "Location",
-      value: location,
-      href: undefined,
-      icon: <MapPin className="w-4 h-4" />,
-      color: "text-emerald-600 dark:text-emerald-400",
-      bg: "bg-emerald-500/8 dark:bg-emerald-500/15 border-emerald-500/15",
-    },
-    {
-      label: "GitHub",
-      value: "github.com/sajiya1528",
-      href: github,
-      icon: <Github className="w-4 h-4" />,
-      color: "text-gray-700 dark:text-gray-300",
-      bg: "bg-gray-100 dark:bg-gray-800/60 border-gray-200 dark:border-gray-700",
-    },
-    {
-      label: "LinkedIn",
-      value: "in/sajiya-nazir1528",
-      href: linkedin,
-      icon: <Linkedin className="w-4 h-4" />,
-      color: "text-[#1E3A8A] dark:text-blue-400",
-      bg: "bg-[#1E3A8A]/8 dark:bg-[#1E3A8A]/20 border-[#1E3A8A]/15",
-    },
-  ];
-
-  /* ─────────────────── Input classes ───────────────────────────────────── */
   const inputCls =
-    "w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 " +
-    "bg-[#F8FAFC] dark:bg-[#111827] text-gray-900 dark:text-white placeholder:text-gray-400 " +
-    "text-sm focus:outline-none focus:border-[#1E3A8A] dark:focus:border-[#F97316] " +
-    "transition-colors duration-200";
+    "w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-slate-700 " +
+    "bg-white dark:bg-[#111827] text-gray-900 dark:text-white placeholder:text-gray-400 " +
+    "text-sm focus:outline-none focus:border-[#1E3A8A] dark:focus:border-[#2563EB] " +
+    "focus:ring-2 focus:ring-[#1E3A8A]/10 dark:focus:ring-[#2563EB]/10 " +
+    "transition-all duration-200";
 
-  const labelCls = "text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-slate-500";
+  const labelCls = "text-[10px] font-bold uppercase tracking-widest text-gray-500 dark:text-slate-400 mb-1.5 block";
 
   return (
-    <section
+    <motion.section
       id="contact"
-      className="py-20 px-4 md:px-8 relative border-t border-blue-900/8 dark:border-blue-200/70
-        bg-[#F8FAFC] dark:bg-[#eaf4ff]"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="py-20 px-4 md:px-8 relative border-t border-gray-100/30 dark:border-slate-800/50 bg-[#F8FAFC] dark:bg-[#0f172a]"
     >
+      {/* Floating particles */}
+      {[...Array(10)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full bg-orange-500/10 dark:bg-orange-400/10 blur-sm pointer-events-none"
+          style={{
+            width: Math.random() * 3 + 1,
+            height: Math.random() * 3 + 1,
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+          animate={{ y: [0, -20, 0], opacity: [0.2, 0.6, 0.2] }}
+          transition={{ duration: Math.random() * 3 + 3, repeat: Infinity, ease: "easeInOut", delay: Math.random() * 2 }}
+        />
+      ))}
+
       {/* Floating toast notification */}
       <AnimatePresence>
         {toast && (
@@ -151,11 +124,12 @@ export const Contact: React.FC = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -16, scale: 0.95 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
-            className={`fixed top-20 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-2xl shadow-xl flex items-center gap-3 text-sm font-semibold min-w-[280px] max-w-sm ${
+            className={cn(
+              "fixed top-20 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-2xl shadow-xl flex items-center gap-3 text-sm font-semibold min-w-[280px] max-w-sm",
               toast.type === "success"
                 ? "bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
                 : "bg-red-50 dark:bg-red-950/80 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800"
-            }`}
+            )}
           >
             {toast.type === "success"
               ? <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
@@ -166,28 +140,71 @@ export const Contact: React.FC = () => {
         )}
       </AnimatePresence>
 
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
-        <div className="text-center mb-14">
-          <h2 className="font-display font-bold text-3xl md:text-4xl text-[#1E3A8A] dark:text-white tracking-wide">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-14"
+        >
+          <h2 className="font-display font-bold text-3xl md:text-4xl text-gray-900 dark:text-white tracking-wide">
             Let's Work Together
           </h2>
           <div className="w-12 h-1 bg-gradient-to-r from-[#1E3A8A] to-[#F97316] mx-auto mt-3 rounded-full" />
-          <p className="text-gray-500 dark:text-slate-400 text-sm mt-4 max-w-xl mx-auto leading-relaxed">
+          <p className="text-gray-500 dark:text-gray-400 text-sm mt-4 max-w-xl mx-auto leading-relaxed">
             Have a project in mind or want to discuss a full-stack developer role? Send me a message and I'll get back to you quickly!
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
-          {/* ── Left: Contact Cards ── */}
-          <div className="lg:col-span-5 space-y-3 text-left">
+          {/* Left: Contact Info Cards */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="lg:col-span-5 space-y-4 text-left"
+          >
             <h3 className="font-display font-bold text-lg text-gray-900 dark:text-white mb-5 tracking-wide flex items-center gap-2">
               <span className="w-1 h-6 bg-gradient-to-b from-[#1E3A8A] to-[#F97316] rounded-full" />
               Contact Details
             </h3>
 
-            {contactCards.map((card, idx) => {
+            {[
+              {
+                label: "Email",
+                value: email,
+                href: `mailto:${email}`,
+                icon: <Mail className="w-5 h-5" />,
+                color: "text-[#1E3A8A]",
+                bg: "bg-[#1E3A8A]/8 border-[#1E3A8A]/15",
+              },
+              {
+                label: "Phone",
+                value: `+91 ${phone}`,
+                href: `tel:${phone}`,
+                icon: <Phone className="w-5 h-5" />,
+                color: "text-[#F97316]",
+                bg: "bg-[#F97316]/8 border-[#F97316]/15",
+              },
+              {
+                label: "LinkedIn",
+                value: "in/sajiya-nazir1528",
+                href: linkedin,
+                icon: <Linkedin className="w-5 h-5" />,
+                color: "text-[#2563EB]",
+                bg: "bg-[#2563EB]/8 border-[#2563EB]/15",
+              },
+              {
+                label: "GitHub",
+                value: "github.com/sajiya1528",
+                href: github,
+                icon: <Github className="w-5 h-5" />,
+                color: "text-gray-700 dark:text-gray-300",
+                bg: "bg-gray-100 dark:bg-slate-800 border-gray-200 dark:border-slate-700",
+              },
+            ].map((card, idx) => {
               const Wrapper = card.href ? "a" : "div";
               const wrapperProps = card.href
                 ? { href: card.href, target: card.href.startsWith("http") ? "_blank" : undefined, rel: "noopener noreferrer" }
@@ -203,16 +220,19 @@ export const Contact: React.FC = () => {
                 >
                   <Wrapper
                     {...wrapperProps}
-                    className={`flex items-center gap-4 p-4 rounded-2xl border ${card.bg} glass-panel dark:card-glow transition-all duration-300 group ${card.href ? "cursor-pointer hover:scale-[1.01]" : ""}`}
+                    className={cn(
+                      "flex items-center gap-4 p-4 rounded-2xl border glass-panel dark:card-glow transition-all duration-300 group",
+                      card.href ? "cursor-pointer hover:scale-[1.01]" : ""
+                    )}
                   >
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center border ${card.bg} shrink-0 ${card.color} group-hover:scale-110 transition-transform duration-300`}>
+                    <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center border shrink-0 transition-all duration-300 group-hover:scale-110", card.bg, card.color)}>
                       {card.icon}
                     </div>
                     <div className="flex flex-col min-w-0">
                       <span className="text-[10px] text-gray-400 dark:text-slate-500 font-bold uppercase tracking-widest">
                         {card.label}
                       </span>
-                      <span className={`text-sm font-semibold truncate ${card.color} group-hover:opacity-80 transition-opacity`}>
+                      <span className={cn("text-sm font-semibold truncate transition-opacity", card.color, card.href ? "group-hover:opacity-80" : "")}>
                         {card.value}
                       </span>
                     </div>
@@ -220,18 +240,16 @@ export const Contact: React.FC = () => {
                 </motion.div>
               );
             })}
-          </div>
+          </motion.div>
 
-          {/* ── Right: Contact Form ── */}
-          <div className="lg:col-span-7">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="rounded-2xl p-7 md:p-8 glass-panel dark:card-glow border border-blue-900/8 dark:border-orange-500/8
-                bg-white dark:bg-[#111827] shadow-lg shadow-blue-900/5 dark:shadow-black/30"
-            >
+          {/* Right: Contact Form */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="lg:col-span-7"
+          >
+            <div className="rounded-2xl p-7 md:p-8 glass-panel dark:card-glow border border-gray-200/50 dark:border-slate-800/60 bg-white dark:bg-[#111827] shadow-lg dark:shadow-black/30">
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 text-left">
 
                 {/* Two-col row: Name + Email */}
@@ -296,8 +314,7 @@ export const Contact: React.FC = () => {
                   type="submit"
                   disabled={isSubmitting}
                   className="w-full py-3.5 rounded-xl font-bold text-sm tracking-wide flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer shadow-lg
-                    bg-[#1E3A8A] hover:bg-[#F97316] text-white
-                    dark:bg-[#1E3A8A] dark:hover:bg-[#F97316]
+                    bg-gradient-to-r from-[#1E3A8A] to-[#2563EB] hover:from-[#1E3A8A] hover:to-[#F97316] text-white
                     shadow-blue-900/20 hover:shadow-orange-500/25
                     disabled:opacity-55 disabled:cursor-not-allowed
                     hover:scale-[1.01] active:scale-[0.99]"
@@ -316,11 +333,11 @@ export const Contact: React.FC = () => {
                 </button>
 
               </form>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
 
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };

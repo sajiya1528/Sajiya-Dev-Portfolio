@@ -8,7 +8,7 @@ interface LoaderProps {
 export const Loader: React.FC<LoaderProps> = ({ finishLoading }) => {
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[#eaf4ff]"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#F8FAFC] dark:bg-[#0f172a]"
       initial={{ opacity: 1 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -17,8 +17,8 @@ export const Loader: React.FC<LoaderProps> = ({ finishLoading }) => {
     >
       <div className="relative flex flex-col items-center gap-6">
         {/* Outer glow rings */}
-        <div className="absolute w-32 h-32 rounded-full bg-[#1E3A8A]/10 blur-xl animate-pulse" />
-        <div className="absolute w-24 h-24 rounded-full bg-[#F97316]/10 blur-lg animate-pulse" style={{ animationDelay: "0.5s" }} />
+        <div className="absolute w-32 h-32 rounded-full bg-[#1E3A8A]/10 dark:bg-blue-500/10 blur-xl animate-pulse" />
+        <div className="absolute w-24 h-24 rounded-full bg-[#F97316]/10 dark:bg-orange-500/10 blur-lg animate-pulse" style={{ animationDelay: "0.5s" }} />
 
         {/* Rotating border */}
         <motion.div
@@ -36,7 +36,7 @@ export const Loader: React.FC<LoaderProps> = ({ finishLoading }) => {
 
         {/* Loading label */}
         <motion.p
-          className="mt-6 text-sm font-sans font-semibold tracking-[0.3em] text-slate-400 uppercase"
+          className="mt-6 text-sm font-sans font-semibold tracking-[0.3em] text-slate-400 dark:text-slate-500 uppercase"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.8 }}

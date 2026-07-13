@@ -1,80 +1,158 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Award, ExternalLink, ShieldCheck } from "lucide-react";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Award, ExternalLink, ShieldCheck, Filter } from "lucide-react";
 import { portfolioData } from "../data/portfolioData";
+import { cn } from "../lib/utils";
+
+const FILTER_TABS = ["All", "Web Development", "Backend", "Database", "AI & ML"];
 
 export const Certifications: React.FC = () => {
+  const [activeTab, setActiveTab] = useState("All");
   const certifications = portfolioData.certifications;
 
+  const filteredCertifications = certifications.filter((cert) => {
+    if (activeTab === "All") return true;
+    const lower = activeTab.toLowerCase();
+    if (lower === "web development") return cert.name.toLowerCase().includes("react") || cert.name.toLowerCase().includes("web");
+    if (lower === "backend") return cert.name.toLowerCase().includes("full stack") || cert.name.toLowerCase().includes("backend");
+    if (lower === "database") return cert.name.toLowerCase().includes("database") || cert.name.toLowerCase().includes("mysql");
+    if (lower === "ai & ml") return cert.name.toLowerCase().includes("ai") || cert.name.toLowerCase().includes("java");
+    return true;
+  });
+
   return (
-    <section id="certifications" className="py-20 px-4 md:px-8 border-t border-gray-100/30 dark:border-gray-900/30 relative">
-      <div className="max-w-7xl mx-auto">
-        
+    <motion.section
+      id="certifications"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="py-20 px-4 md:px-8 bg-[#F8FAFC] dark:bg-[#0f172a] border-t border-gray-100/30 dark:border-slate-800/50 relative"
+    >
+      {/* Floating particles */}
+      {[...Array(8)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full bg-purple-500/10 dark:bg-purple-400/10 blur-sm pointer-events-none"
+          style={{
+            width: Math.random() * 3 + 1,
+            height: Math.random() * 3 + 1,
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+          animate={{ y: [0, -20, 0], opacity: [0.2, 0.6, 0.2] }}
+          transition={{ duration: Math.random() * 3 + 3, repeat: Infinity, ease: "easeInOut", delay: Math.random() * 2 }}
+        />
+      ))}
+
+      <div className="max-w-7xl mx-auto relative z-10">
+
         {/* Header */}
-        <div className="text-center mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-16"
+        >
           <h2 className="font-display font-bold text-3xl md:text-4xl text-gray-900 dark:text-white tracking-wide">
             Certifications
           </h2>
-          <div className="w-12 h-1 bg-gradient-to-r from-purple-500 to-cyan-500 mx-auto mt-3 rounded-full" />
+          <div className="w-12 h-1 bg-gradient-to-r from-[#1E3A8A] to-[#F97316] mx-auto mt-3 rounded-full" />
           <p className="text-gray-500 dark:text-gray-400 text-xs md:text-sm mt-4 max-w-xl mx-auto leading-relaxed">
             Professional training validation, skill badges, and academy certificates.
           </p>
-        </div>
+        </motion.div>
+
+        {/* Filter Chips */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="flex flex-wrap items-center justify-center gap-2 mb-12"
+        >
+          <Filter className="w-4 h-4 text-gray-400 mr-1" />
+          {FILTER_TABS.map((tab) => {
+            const isActive = activeTab === tab;
+            return (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={cn(
+                  "relative px-4 py-2 text-xs font-semibold rounded-full tracking-wide transition-colors border cursor-pointer",
+                  isActive
+                    ? "text-white border-[#1E3A8A] dark:border-[#2563EB]"
+                    : "text-gray-600 dark:text-gray-400 border-gray-200/50 dark:border-slate-800/50 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-900/30"
+                )}
+              >
+                <span className="relative z-10">{tab}</span>
+                {isActive && (
+                  <motion.div
+                    layoutId="activeCertFilterBg"
+                    className="absolute inset-0 bg-gradient-to-r from-[#1E3A8A] to-[#2563EB] rounded-full"
+                    transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                  />
+                )}
+              </button>
+            );
+          })}
+        </motion.div>
 
         {/* Certifications Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {certifications.map((cert, idx) => (
-            <motion.div
-              key={cert.id || idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="group rounded-2xl glass-panel bg-white/40 dark:bg-gray-950/20 border border-gray-200/50 dark:border-gray-800/60 p-5 flex flex-col justify-between hover:shadow-lg dark:hover:shadow-purple-500/2 hover:border-purple-500/40 dark:hover:border-cyan-400/40 transition-all duration-300"
-            >
-              
-              {/* Top Section: Placeholders */}
-              <div>
-                {/* Visual Backdrop Placeholder */}
-                <div className="w-full h-32 rounded-xl bg-gradient-to-br from-purple-950/20 to-cyan-950/20 border border-gray-200/30 dark:border-gray-800/30 flex items-center justify-center relative overflow-hidden mb-4 select-none">
-                  <div className="absolute inset-0 bg-dot-grid opacity-35" />
-                  <div className="w-10 h-10 rounded-full bg-white/5 dark:bg-white/10 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-300">
-                    <ShieldCheck className="w-5 h-5 text-cyan-400 group-hover:text-purple-400 transition-colors" />
+        <motion.div
+          layout
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+        >
+          <AnimatePresence mode="popLayout">
+            {filteredCertifications.map((cert, idx) => (
+              <motion.div
+                key={cert.id || idx}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4, delay: idx * 0.05 }}
+                className="group rounded-2xl glass-panel bg-white/60 dark:bg-slate-900/60 border border-gray-200/50 dark:border-slate-800/60 overflow-hidden hover:shadow-xl dark:hover:shadow-blue-500/5 hover:border-blue-500/30 dark:hover:border-blue-500/30 transition-all duration-300 cursor-pointer"
+              >
+                {/* Certificate Image Placeholder */}
+                <div className="w-full h-36 bg-gradient-to-br from-[#1E3A8A]/10 to-[#F97316]/10 dark:from-[#1E3A8A]/20 dark:to-[#F97316]/20 border-b border-gray-200/50 dark:border-slate-800/60 flex items-center justify-center relative overflow-hidden">
+                  <div className="absolute inset-0 bg-dot-grid opacity-30" />
+                  <div className="w-12 h-12 rounded-full bg-white/80 dark:bg-slate-800/80 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <ShieldCheck className="w-6 h-6 text-[#1E3A8A] group-hover:text-[#F97316] transition-colors" />
                   </div>
-                  <Award className="absolute -bottom-2 -right-2 w-12 h-12 text-purple-500/10 pointer-events-none" />
+                  <Award className="absolute -bottom-2 -right-2 w-10 h-10 text-[#F97316]/10 pointer-events-none" />
                 </div>
 
                 {/* Details info */}
-                <h3 className="font-display font-bold text-gray-900 dark:text-white text-sm md:text-base tracking-wide leading-snug text-left group-hover:text-purple-600 dark:group-hover:text-cyan-400 transition-colors">
-                  {cert.name}
-                </h3>
-                <p className="text-xs text-purple-600 dark:text-cyan-400 font-semibold text-left mt-1.5">
-                  {cert.issuer}
-                </p>
-              </div>
+                <div className="p-5">
+                  <h3 className="font-display font-bold text-gray-900 dark:text-white text-sm md:text-base tracking-wide leading-snug text-left group-hover:text-[#1E3A8A] dark:group-hover:text-[#2563EB] transition-colors">
+                    {cert.name}
+                  </h3>
+                  <p className="text-xs text-[#1E3A8A] dark:text-[#F97316] font-semibold text-left mt-1.5">
+                    {cert.issuer}
+                  </p>
 
-              {/* Bottom Section: Date & Link */}
-              <div className="mt-6 pt-3 border-t border-gray-100 dark:border-gray-900 flex items-center justify-between">
-                <span className="text-[10px] text-gray-400 font-medium font-sans">
-                  {cert.date}
-                </span>
+                  {/* Bottom: Date & Link */}
+                  <div className="mt-4 pt-3 border-t border-gray-100 dark:border-slate-800 flex items-center justify-between">
+                    <span className="text-[10px] text-gray-400 dark:text-gray-500 font-medium font-sans">
+                      {cert.date}
+                    </span>
 
-                <a
-                  href={cert.url || "#"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-gray-100/50 dark:bg-gray-900/60 border border-gray-200/50 dark:border-gray-800/50 hover:border-purple-500 dark:hover:border-cyan-400 hover:bg-white dark:hover:bg-gray-900 text-[10px] font-bold text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-cyan-400 transition-all cursor-pointer"
-                >
-                  View
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </div>
+                    <a
+                      href={cert.url || "#"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-slate-800 border border-gray-200/50 dark:border-slate-700/50 hover:border-[#1E3A8A] dark:hover:border-[#F97316] hover:bg-white dark:hover:bg-slate-700 text-[10px] font-bold text-gray-600 dark:text-gray-300 hover:text-[#1E3A8A] dark:hover:text-[#F97316] transition-all cursor-pointer"
+                    >
+                      View
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                </div>
 
-            </motion.div>
-          ))}
-        </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
 
       </div>
-    </section>
+    </motion.section>
   );
 };

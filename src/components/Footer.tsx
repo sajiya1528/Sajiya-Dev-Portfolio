@@ -6,7 +6,7 @@ export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-slate-200/70 dark:border-blue-200/70 bg-white/90 dark:bg-[#f5faff] py-8 px-4 relative z-10 shadow-[0_-12px_40px_rgba(15,23,42,0.04)] dark:shadow-[0_-12px_40px_rgba(59,130,246,0.12)]">
+    <footer className="border-t border-slate-200/70 dark:border-slate-800 bg-white/90 dark:bg-[#111827] py-8 px-4 relative z-10 shadow-[0_-12px_40px_rgba(15,23,42,0.04)] dark:shadow-[0_-12px_40px_rgba(0,0,0,0.3)]">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
 
         {/* Left — Hexagon Logo + Brand */}

@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --font-sans: "Inter", sans-serif;
   --font-display: "Space Grotesk", sans-serif;
@@ -13,9 +15,9 @@
   --color-light-card: rgba(255, 255, 255, 0.95);
 
   /* Dark Mode */
-  --color-dark-bg: #eaf4ff;
-  --color-dark-nav: #f5faff;
-  --color-dark-card: #ffffff;
+  --color-dark-bg: #0f172a;
+  --color-dark-nav: #111827;
+  --color-dark-card: #1e293b;
 
   --animate-float-slow: float 8s ease-in-out infinite;
   --animate-float-medium: float 6s ease-in-out infinite;
@@ -62,6 +64,7 @@ body {
 }
 
 .dark body {
+  background: var(--color-dark-bg);
   color: #f8fafc;
 }
 
@@ -80,11 +83,11 @@ body {
    DARK MODE GLASS
    ===================== */
 .dark .glass-panel {
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(17, 24, 39, 0.7);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(30, 58, 138, 0.14);
-  box-shadow: 0 20px 60px rgba(59, 130, 246, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
 /* =====================
@@ -154,14 +157,14 @@ body {
    DARK MODE CARD GLOW
    ===================== */
 .dark .card-glow {
-  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.08),
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08),
               0 8px 32px rgba(0, 0, 0, 0.4),
-              0 0 24px rgba(30, 58, 138, 0.06);
+               0 0 24px rgba(37, 99, 235, 0.06);
 }
 .dark .card-glow:hover {
-  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.15),
-              0 12px 40px rgba(0, 0, 0, 0.5),
-              0 0 32px rgba(30, 58, 138, 0.12);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15),
+               0 12px 40px rgba(0, 0, 0, 0.5),
+               0 0 32px rgba(37, 99, 235, 0.12);
 }
 
 /* Hide scrollbar utility */
