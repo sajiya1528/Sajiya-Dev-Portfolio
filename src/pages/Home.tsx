@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, Download, Sparkles } from "lucide-react";
 import { portfolioData } from "../data/portfolioData";
+import profilePic from "../assets/sajiya portfoilio logo.jpeg";
 
 const ALL_SKILLS = [
   ...portfolioData.skillCategories.flatMap(cat => cat.skills.map(s => s.name))
@@ -88,7 +89,7 @@ export const Home: React.FC = () => {
         {/* Left Side: Copywriting Content */}
         <div className="lg:col-span-7 text-left order-2 lg:order-1 flex flex-col justify-center">
 
-          {/* Sparkle Greeting tag */}
+            {/* Sparkle Greeting tag */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -186,7 +187,7 @@ export const Home: React.FC = () => {
 
                 {/* Profile Image */}
                 <img
-                  src="/hero.png"
+                  src={profilePic}
                   alt="Sajiya Nazir"
                   className="w-[85%] h-[85%] rounded-full object-cover relative z-10 hover:scale-105 transition-transform duration-300"
                   onError={(e) => {
